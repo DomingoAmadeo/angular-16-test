@@ -6,9 +6,10 @@ export function minToday(): ValidatorFn {
       return null;
     }
 
-    const inputDate = new Date(control.value);    
+    const inputDate = new Date(control.value);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const offset = today.getTimezoneOffset()
+    today.setHours(-(offset/60), 0, 0, 0);
     
     if (inputDate < today) {
       return {
