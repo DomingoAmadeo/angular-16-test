@@ -51,12 +51,13 @@ export class HomeComponent {
           contents: products,
           totalCount: count,
           currentPage: currentPage,
-          lastPage: lastPage
+          lastPage: lastPage ? lastPage : 1
         };
       }),
+      debounceTime(10),
       tap((res) => {
         this.isLoading = false;
-        if (res.lastPage < res.currentPage) {
+        if (res.lastPage < res.currentPage && this.currentPage() != 1) {
           this.currentPage.set(1);
         }
       })
