@@ -1,0 +1,57 @@
+<div class="flex-row" style="padding: 5vmin;">
+    <div class="flex-column" style="margin: auto; gap: 2vh;" *ngIf="{stream: result$ | async} as observable">
+        <div class="flex-row" style="justify-content: space-between; max-height: 6vh;">
+            <input [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" class="card" style="max-width: 20vw;" type="text" placeholder="Search...">
+            <button class="btn-new clickable" [routerLink]="'/new'">Agregar</button>
+        </div>
+        <div style="background-color: #ffffff; padding: 3vmin; max-width: 85vw; border-radius: 4px;">
+            <table>
+                <thead style="background-color: #f9fafc;">
+                    <tr>
+                        <th>Logo</th>
+                        <th>Nombre del producto</th>
+                        <th>Descripcion</th>
+                        <th>Fecha de liberación</th>
+                        <th>Fecha de reestructuración</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let product of observable.stream?.contents">
+                        <tr>
+                            <td><img class="img" src="{{ product.logo }}" alt="logo"></td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>{{ product.date_release | date: 'shortDate' }}</td>
+                            <td>{{ product.date_revision | date: 'shortDate' }}</td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="!observable.stream">
+                        <tr *ngFor="let item of [].constructor(+pageSize())">
+                            <td><span class="skeleton skeleton-img"></span></td>
+                            <td><span class="skeleton skeleton-txt" style="width: 10vw;"></span></td>
+                            <td><span class="skeleton skeleton-txt" style="width: 28vw;"></span></td>
+                            <td><span class="skeleton skeleton-txt" style="width: 5vw;"></span></td>
+                            <td><span class="skeleton skeleton-txt" style="width: 5vw;"></span></td>
+
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <div class="flex-row" style="justify-content: space-between; margin: 3vmin 0;">
+                <span>{{ observable.stream?.contents.length }} de {{ observable.stream?.totalCount }} Resultado{{ observable.stream?.totalCount == 1 ? '' : 's'}}</span>
+                <div class="pagination">
+                    <button class="clickable" (click)="currentPage.set(1)" *ngIf="currentPage() > 1">≪</button>
+                    <button class="clickable" (click)="currentPage.set(currentPage() - 1)" *ngIf="currentPage() > 1">&lt;</button>
+                    <button class="clickable" [disabled]="true">{{ currentPage() }}</button>
+                    <button class="clickable" (click)="currentPage.set(currentPage() + 1)" *ngIf="currentPage() < observable.stream?.lastPage">&gt;</button>
+                    <button class="clickable" (click)="currentPage.set(observable.stream?.lastPage)" *ngIf="currentPage() < observable.stream?.lastPage">≫</button>
+                </div>
+                <select class="form-control" [ngModel]="pageSize()" (ngModelChange)="pageSize.set($event)">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

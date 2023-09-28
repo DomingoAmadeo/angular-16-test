@@ -1,0 +1,22 @@
+.toast-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0 2vmin 2vmin 0;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2vmin;
+}
+
+.toast {
+  cursor: pointer;
+  width: 30vmin;
+  min-height: 15vmin;
+  height: fit-content;
+  padding: 1vmin 1.5vmin;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

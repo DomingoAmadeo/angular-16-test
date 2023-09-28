@@ -1,0 +1,73 @@
+<div class="flex-row" style="padding: 5vmin;">
+    <form class="flex-column form" [formGroup]="productForm" *ngIf="{stream: validation$ | async} as observable">
+        <h1>Formulario de Registro</h1>
+        <div class="line-div"></div>
+        <div class="flex-row form-fields">
+            <div class="flex-column field-column">
+                <label for="id">ID</label>
+                <input class="form-input" type="text" name="id" id="id" formControlName="id" [value]="validId()" (ngModelChange)="validId.set($event)"
+                    [ngStyle]="observable.stream ? {'border-color': 'red'} : {}" autocomplete="off">
+                <span class="err-msg" *ngIf="!productForm.value.id && (productForm.controls.id.dirty || productForm.controls.id.touched)">
+                    Este campo es requerido
+                </span>
+                <span class="err-msg" *ngIf="observable.stream">
+                    Este Id ya se encuentra registrado
+                </span>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'id',  error: 'minlength'}"></ng-template>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'id',  error: 'maxlength'}"></ng-template>
+            </div>
+            <div class="flex-column field-column">
+                <label for="name">Nombre:</label>
+                <input class="form-input" type="text" name="name" id="name" formControlName="name" autocomplete="off">
+                <span class="err-msg" *ngIf="!productForm.value.name && (productForm.controls.name.dirty || productForm.controls.name.touched)">
+                    Este campo es requerido
+                </span>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'name',  error: 'minlength'}"></ng-template>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'name',  error: 'maxlength'}"></ng-template>
+            </div>
+            <div class="flex-column field-column">
+                <label for="description">Descripción</label>
+                <input class="form-input" type="text" name="description" id="description" formControlName="description" autocomplete="off">
+                <span class="err-msg" *ngIf="!productForm.value.description && (productForm.controls.description.dirty || productForm.controls.description.touched)">
+                    Este campo es requerido
+                </span>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'description',  error: 'minlength'}"></ng-template>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'description',  error: 'maxlength'}"></ng-template>
+            </div>
+            <div class="flex-column field-column">
+                <label for="logo">Logo</label>
+                <input class="form-input" type="text" name="logo" id="logo" formControlName="logo" autocomplete="off">
+                <span class="err-msg" *ngIf="!productForm.value.logo && (productForm.controls.logo.dirty || productForm.controls.logo.touched)">
+                    Este campo es requerido
+                </span>
+            </div>
+            <div class="flex-column field-column">
+                <label for="date_release">Fecha Liberación</label>
+                <input class="form-input" type="date" name="date_release" id="date_release" formControlName="date_release" (change)="changeDate($event)"
+                    [ngStyle]="productForm.controls.date_release.errors?.['min-today'] ? {'border-color': 'red'} : {}" autocomplete="off">
+                <span class="err-msg" *ngIf="!productForm.value.date_release
+                    && (productForm.controls.date_release.dirty || productForm.controls.date_release.touched)">
+                    Este campo es requerido
+                </span>
+                <ng-template [ngTemplateOutlet]="errorMsg" [ngTemplateOutletContext]="{ control: 'date_release',  error: 'min-today'}"></ng-template>
+            </div>
+            <div class="flex-column field-column">
+                <label for="description" style="color: #c7c7c8;">Fecha Revisión</label>
+                <input class="form-input disabled" [ngModel]="releaseDate" [ngModelOptions]="{standalone: true}" disabled autocomplete="off">
+            </div>
+        </div>
+        <div class="flex-row" style="justify-content: space-evenly; width: 55%; margin-top: 4vmin;">
+            <button class="btn" style="background-color: #e9ecf3;" (click)="reset()">Reiniciar</button>
+            <button class="btn" style="background-color: #f9de4b;" (click)="submit()" [disabled]="productForm.invalid || observable.stream">Enviar</button>
+        </div>
+    </form>
+</div>
+
+
+<ng-template #errorMsg let-c="control" let-e="error">
+    <span class="err-msg" *ngIf="productForm.controls[c].errors?.[e]">
+        {{ e == 'minlength' ? 'La longitud mínima es de ' + productForm.controls[c].errors?.[e].requiredLength + ' caracteres' : ''}}
+        {{ e == 'maxlength' ? 'La longitud máxima es de ' + productForm.controls[c].errors?.[e].requiredLength + ' caracteres' : ''}}
+        {{ e == 'min-today' ? 'Seleccione una fecha a partir de hoy' : ''}}
+    </span>
+</ng-template>

@@ -1,0 +1,16 @@
+
+<div class="toast-container" *ngIf="toasts.length">
+  <ng-template *ngFor="let toast of toasts" [ngTemplateOutlet]="{error, success}[toast.template]" [ngTemplateOutletContext]="{ 'toast': toast}"></ng-template>
+</div>
+
+<ng-template #success let-t='toast'>
+  <div class="toast" style="background-color: #f9de4b;" (click)="closeToast(t.id)">
+    <span style="width: min-content; font-weight: 550;">{{ t.message | uppercase }}</span>
+  </div>
+</ng-template>
+
+<ng-template #error let-t='toast'>
+  <div class="toast" style="background-color: #dc3545;" (click)="closeToast(t.id)">
+    <span style="width: min-content; font-weight: 550; color: white;">{{ t.message | uppercase }}</span>
+  </div>
+</ng-template>
